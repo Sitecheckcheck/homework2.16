@@ -1,4 +1,5 @@
 import { getComments, deleteComments, addComments } from "./api.js";
+import { renderLoginComponent } from "./component.js";
 
 const nameInputElement = document.getElementById("name-input");
 const listElement = document.getElementById("list");
@@ -10,7 +11,8 @@ token = null;
 let comments = [];
 
 function fetchRenderComments() {
-  return getComments({token}).then((responseData) => {
+  return getComments({ token })
+    .then((responseData) => {
       const options = {
         year: "2-digit",
         month: "numeric",
@@ -45,33 +47,12 @@ const renderComments = () => {
   const appEl = document.getElementById("app");
 
   if (!token) {
-    const appHtml = `    
-    <div class="container">
-    <div class="add-form" id="input-box">
-      <input
-        id="login-input"
-        type="text"
-        class="add-form-name"
-        placeholder="Введите логин"
-      />
-      <input
-      id="password-input"
-      type="text"
-      class="add-form-name"
-      placeholder="Введите пароль"
-    />
-      <div class="add-form-row">
-        <button id="login-button" class="add-form-button">Войти</button>
-      </div>
-    </div>
-    </div>
-    `;
-
-    appEl.innerHTML = appHtml;
-
-    document.getElementById("login-button").addEventListener("click", () => {
-      token = "Bearer cgascsbkas6g5g5g5g5g6gcgascsbkas";
-      fetchRenderComments();
+    renderLoginComponent({
+      appEl,
+      setToken: (newToken) => {
+        token = newToken;
+      },
+      fetchRenderComments,
     });
 
     return;
@@ -170,7 +151,7 @@ const renderComments = () => {
       event.stopPropagation();
 
       const id = deleteButton.dataset.id;
-      deleteComments({token, id}).then(() => {
+      deleteComments({ token, id }).then(() => {
         fetchRenderComments();
       });
     });
@@ -180,7 +161,6 @@ const renderComments = () => {
   inputClick();
 };
 
-// fetchRenderComments();
 renderComments();
 likeButton();
 
