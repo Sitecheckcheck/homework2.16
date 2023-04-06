@@ -1,4 +1,6 @@
-export function renderLoginComponent({appEl, setToken, fetchRenderComments }) {
+import { loginUser } from "./api.js";
+
+export function renderLoginComponent({ appEl, setToken, fetchRenderComments }) {
   const appHtml = `    
     <div class="container">
     <div class="add-form" id="input-box">
@@ -10,7 +12,7 @@ export function renderLoginComponent({appEl, setToken, fetchRenderComments }) {
       />
       <input
       id="password-input"
-      type="text"
+      type="password"
       class="add-form-name"
       placeholder="Введите пароль"
     />
@@ -24,9 +26,27 @@ export function renderLoginComponent({appEl, setToken, fetchRenderComments }) {
   appEl.innerHTML = appHtml;
 
   document.getElementById("login-button").addEventListener("click", () => {
+    const login = document.getElementById('login-input').value
+    const password = document.getElementById('password-input').value
 
-    setToken("Bearer cgascsbkas6g5g5g5g5g6gcgascsbkas");
+    if(!login){
+        alert('Введите логин')
+        return
+    }
 
-    fetchRenderComments();
+    if(!password){
+        alert('Введите пароль')
+        return
+    }
+
+    loginUser({
+      login: login,
+      password: password,
+    }).then((user) => {
+      setToken(`Bearer ${user.user.token}`);
+      fetchRenderComments();
+    }).catch(error => {
+        alert(error.message)
+    })
   });
 }
