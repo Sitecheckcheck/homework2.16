@@ -1,3 +1,5 @@
+import { getComments, deleteComments, addComments } from "./api.js";
+
 const nameInputElement = document.getElementById("name-input");
 const listElement = document.getElementById("list");
 const inputElement = document.getElementById("input-box");
@@ -8,19 +10,7 @@ token = null;
 let comments = [];
 
 function fetchRenderComments() {
-  return fetch(
-    "https://webdev-hw-api.vercel.app/api/v2/pavel-danilov/comments",
-    {
-      method: "GET",
-      headers: {
-        Authorization: token,
-      },
-    }
-  )
-    .then((response) => {
-      return response.json();
-    })
-    .then((responseData) => {
+  return getComments({token}).then((responseData) => {
       const options = {
         year: "2-digit",
         month: "numeric",
@@ -83,7 +73,7 @@ const renderComments = () => {
       token = "Bearer cgascsbkas6g5g5g5g5g6gcgascsbkas";
       fetchRenderComments();
     });
-    
+
     return;
   }
 
@@ -141,11 +131,7 @@ const renderComments = () => {
   const deleteButtons = document.querySelectorAll(".delete-button");
 
   buttonElement.addEventListener("click", () => {
-    fetch("https://webdev-hw-api.vercel.app/api/v2/pavel-danilov/comments", {
-      method: "POST",
-      body: JSON.stringify({ text: textInputElement.value }),
-      headers: { Authorization: token },
-    })
+    addComments({ text: textInputElement.value, token })
       .then((response) => {
         if (response.status === 201) {
           return;
@@ -184,15 +170,7 @@ const renderComments = () => {
       event.stopPropagation();
 
       const id = deleteButton.dataset.id;
-      fetch(
-        "https://webdev-hw-api.vercel.app/api/v2/pavel-danilov/comments/" + id,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: token,
-          },
-        }
-      ).then(() => {
+      deleteComments({token, id}).then(() => {
         fetchRenderComments();
       });
     });
