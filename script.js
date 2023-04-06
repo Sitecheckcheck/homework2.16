@@ -3,7 +3,7 @@ const listElement = document.getElementById("list");
 const inputElement = document.getElementById("input-box");
 
 let token = "Bearer cgascsbkas6g5g5g5g5g6gcgascsbkas";
-token = null
+token = null;
 
 let comments = [];
 
@@ -79,12 +79,12 @@ const renderComments = () => {
 
     appEl.innerHTML = appHtml;
 
-    document.getElementById('login-button').addEventListener('click', ()=> {
+    document.getElementById("login-button").addEventListener("click", () => {
       token = "Bearer cgascsbkas6g5g5g5g5g6gcgascsbkas";
-      fetchRenderComments()
-    })
-
-    return
+      fetchRenderComments();
+    });
+    
+    return;
   }
 
   const commentHtml = comments
@@ -203,7 +203,7 @@ const renderComments = () => {
 };
 
 // fetchRenderComments();
-renderComments()
+renderComments();
 likeButton();
 
 function likeButton() {
