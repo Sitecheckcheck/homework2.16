@@ -126,7 +126,7 @@ function renderComments() {
         if (response.status === 201) {
           return;
         } else if (response.status === 400) {
-          throw new Error("Имя и комментарий должны быть не короче 3 символов");
+          throw new Error("Комментарий должен быть не короче 3 символов");
         } else if (response.status === 500) {
           throw new Error("Сервер упал");
         } else {
@@ -143,7 +143,7 @@ function renderComments() {
         console.log(error);
         if (
           error.message ===
-            "Имя и комментарий должны быть не короче 3 символов" ||
+            "Комментарий должен быть не короче 3 символов" ||
           error.message === "Что то пошло не так"
         ) {
           alert(error.message);
