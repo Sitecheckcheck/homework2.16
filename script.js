@@ -2,6 +2,7 @@ import { getComments, deleteComments, addComments } from "./api.js";
 import { renderLoginComponent } from "./component.js";
 
 let name;
+let loginDel
 // let token = "Bearer cgascsbkas6g5g5g5g5g6gcgascsbkas";
 let token = null;
 
@@ -35,18 +36,18 @@ function fetchRenderComments() {
           userId: comment.author.id,
         };
       });
-
+      
       comments = appComments;
       renderComments();
     })
     .catch((error) => {
       alert("Кажется, у вас сломался интернет, попробуйте позже");
     });
+    
 }
 
 function renderComments() {
   const appEl = document.getElementById("app");
-
 
   if (!token) {
     renderLoginComponent({
@@ -56,6 +57,9 @@ function renderComments() {
       },
       setName: (newName) => {
         name = newName;
+      },
+      setLogin: (newLogin) => {
+        loginDel = newLogin;
       },
       fetchRenderComments,
       renderComments,
@@ -85,14 +89,13 @@ function renderComments() {
         </div>
       </div>
       <div >
-        <button data-id = ${
-          comment.commentId
-        } class="delete-button">удалить</button>
+        <button data-id = ${comment.commentId} data-user = ${comment.login} 
+        class="delete-button">удалить</button>
       </div>
     </li>`;
     })
     .join("");
-console.log(name);
+
   const appHtml = `    
             <div class="container"> 
             <ul id="list" class="comments">${commentHtml}</ul>
@@ -157,15 +160,19 @@ console.log(name);
       event.stopPropagation();
 
       const id = deleteButton.dataset.id;
-      deleteComments({ token, id }).then(() => {
-        fetchRenderComments();
-      });
+      const loginUser = deleteButton.dataset.user;
+
+      if (loginDel === loginUser) {
+        deleteComments({ token, id }).then(() => {
+          fetchRenderComments();
+        });
+      }
     });
   }
 
   likeButton();
   inputClick();
-};
+}
 
 function likeButton() {
   const likeElements = document.querySelectorAll(".like-button");
@@ -204,8 +211,6 @@ function inputClick() {
     });
   }
 }
-
-
 
 // const nameInputElement = document.getElementById("name-input");
 // const listElement = document.getElementById("list");

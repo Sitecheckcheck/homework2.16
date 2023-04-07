@@ -4,6 +4,7 @@ export function renderLoginComponent({
   appEl,
   setToken,
   setName,
+  setLogin,
   fetchRenderComments,
   comments,
 }) {
@@ -140,6 +141,7 @@ export function renderLoginComponent({
             .then((user) => {
               setToken(`Bearer ${user.user.token}`);
               setName(user.user.name);
+              setLogin(user.user.login);
               fetchRenderComments();
             })
             .catch((error) => {
@@ -173,6 +175,7 @@ export function renderLoginComponent({
             .then((user) => {
               setToken(`Bearer ${user.user.token}`);
               setName(user.user.name);
+              setLogin(user.user.login);
               fetchRenderComments();
             })
             .catch((error) => {
