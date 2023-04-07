@@ -1,17 +1,18 @@
 import { getComments, deleteComments, addComments } from "./api.js";
 import { renderLoginComponent } from "./component.js";
 
-const nameInputElement = document.getElementById("name-input");
-const listElement = document.getElementById("list");
-const inputElement = document.getElementById("input-box");
-
-let token = "Bearer cgascsbkas6g5g5g5g5g6gcgascsbkas";
-token = null;
+let name;
+// let token = "Bearer cgascsbkas6g5g5g5g5g6gcgascsbkas";
+let token = null;
 
 let comments = [];
 
+// fetchRenderComments()
+renderComments();
+likeButton();
+
 function fetchRenderComments() {
-  return getComments({ token })
+  return getComments()
     .then((responseData) => {
       const options = {
         year: "2-digit",
@@ -43,8 +44,9 @@ function fetchRenderComments() {
     });
 }
 
-const renderComments = () => {
+function renderComments() {
   const appEl = document.getElementById("app");
+
 
   if (!token) {
     renderLoginComponent({
@@ -52,7 +54,11 @@ const renderComments = () => {
       setToken: (newToken) => {
         token = newToken;
       },
+      setName: (newName) => {
+        name = newName;
+      },
       fetchRenderComments,
+      renderComments,
     });
 
     return;
@@ -86,12 +92,12 @@ const renderComments = () => {
     </li>`;
     })
     .join("");
-
+console.log(name);
   const appHtml = `    
-            <div class="container">
-            
+            <div class="container"> 
             <ul id="list" class="comments">${commentHtml}</ul>
             <div class="add-form" id="input-box">
+              <input class="add-form-name name-input" id="name-input" value="${name}" disabled>
               <textarea
                 id="text-input"
                 type="textarea"
@@ -161,9 +167,6 @@ const renderComments = () => {
   inputClick();
 };
 
-renderComments();
-likeButton();
-
 function likeButton() {
   const likeElements = document.querySelectorAll(".like-button");
   for (const i of likeElements) {
@@ -201,6 +204,12 @@ function inputClick() {
     });
   }
 }
+
+
+
+// const nameInputElement = document.getElementById("name-input");
+// const listElement = document.getElementById("list");
+// const inputElement = document.getElementById("input-box");
 
 // document.addEventListener("keyup", function (e) {
 //   if (e.keyCode === 13) {

@@ -1,11 +1,8 @@
-export function getComments({ token }) {
+export function getComments() {
   return fetch(
     "https://webdev-hw-api.vercel.app/api/v2/pavel-danilov/comments",
     {
       method: "GET",
-      headers: {
-        Authorization: token,
-      },
     }
   ).then((response) => {
     return response.json();
