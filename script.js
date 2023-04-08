@@ -1,8 +1,8 @@
-import { getComments, deleteComments, addComments } from "./api.js";
+import { getComments, deleteComments, addComments, addLike } from "./api.js";
 import { renderLoginComponent } from "./component.js";
 
 let name;
-let loginDel
+let loginDel;
 // let token = "Bearer cgascsbkas6g5g5g5g5g6gcgascsbkas";
 let token = null;
 
@@ -36,14 +36,13 @@ function fetchRenderComments() {
           userId: comment.author.id,
         };
       });
-      
+
       comments = appComments;
       renderComments();
     })
     .catch((error) => {
       alert("Кажется, у вас сломался интернет, попробуйте позже");
     });
-    
 }
 
 function renderComments() {
@@ -83,7 +82,9 @@ function renderComments() {
       <div class="comment-footer">
         <div class="likes">
           <span class="likes-counter">${comment.likes}</span>
-          <button data-index ='${index}' class="like-button ${
+          <button data-id = ${
+            comment.commentId
+          } data-index ='${index}' class="like-button ${
         comment.isLike ? "-active-like" : ""
       }"></button>
         </div>
@@ -142,8 +143,7 @@ function renderComments() {
       .catch((error) => {
         console.log(error);
         if (
-          error.message ===
-            "Комментарий должен быть не короче 3 символов" ||
+          error.message === "Комментарий должен быть не короче 3 символов" ||
           error.message === "Что то пошло не так"
         ) {
           alert(error.message);
@@ -178,7 +178,9 @@ function likeButton() {
   const likeElements = document.querySelectorAll(".like-button");
   for (const i of likeElements) {
     i.addEventListener("click", (event) => {
+      const id = i.dataset.id;
       event.stopPropagation();
+      addLike(token, id);
       i.classList.add("-loading-like");
       delay(500).then(() => {
         if (i.classList.contains("-active-like")) {
