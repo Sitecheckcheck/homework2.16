@@ -40,25 +40,37 @@ export function loginUser({ login, password }) {
       password,
     }),
   }).then((response) => {
-    if (response.status === 400){
-        throw new Error('Неверный логин или пароль')
+    if (response.status === 400) {
+      throw new Error("Неверный логин или пароль");
     }
     return response.json();
   });
 }
 
 export function registerUser({ name, login, password }) {
-    return fetch("https://webdev-hw-api.vercel.app/api/user", {
+  return fetch("https://webdev-hw-api.vercel.app/api/user", {
+    method: "POST",
+    body: JSON.stringify({
+      name,
+      login,
+      password,
+    }),
+  }).then((response) => {
+    if (response.status === 400) {
+      throw new Error("Такой пользователь уже существует");
+    }
+    return response.json();
+  });
+}
+
+export function addLike({ token, id }) {
+  return fetch(
+    "https://webdev-hw-api.vercel.app/api/v2/pavel-danilov/comments/" +
+      id +
+      "/toggle-like",
+    {
       method: "POST",
-      body: JSON.stringify({
-        name,
-        login,
-        password,
-      }),
-    }).then((response) => {
-      if (response.status === 400){
-          throw new Error('Такой пользователь уже существует')
-      }
-      return response.json();
-    });
-  }
+      headers: { Authorization: token },
+    }
+  );
+}
